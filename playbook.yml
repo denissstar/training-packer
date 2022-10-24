@@ -1,7 +1,10 @@
-- name: 'Provision Image'
+- name: Provision Image
   hosts: default
   become: true
 
   tasks:
     - name: Install Apache
-      apt: name=apache2 update_cache=yes state=latest
+      apt:
+        name: apache2
+        state: latest
+        update_cache: yes

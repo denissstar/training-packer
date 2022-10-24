@@ -1,41 +1,27 @@
-packer {
-  required_plugins {
-    amazon = {
-      version = ">= 0.0.2"
-      source  = "github.com/hashicorp/amazon"
-    }
-  }
-}
-
-variable "ami_prefix" {
-  type    = string
-  default = "packer-ubuntu-apache"
-}
-
 locals {
   timestamp = regex_replace(timestamp(), "[- TZ:]", "")
 }
 
 source "amazon-ebs" "ubuntu" {
   ami_name      = "${var.ami_prefix}-${local.timestamp}"
-  instance_type = "t2.micro"
-  region        = "eu-west-1"
-  # vpc_id        = "vpc-090f496a8c7551a22"
-
-  source_ami_filter {
+  instance_type = var.instance_type
+  region        = var.region
+  source_ami    = data.amazon-ami.ubuntu.id
+  ssh_username  = "ubuntu"
+  vpc_filter {
     filters = {
-      name                = "ubuntu/images/*ubuntu-jammy-22.04-amd64-server-*"
-      root-device-type    = "ebs"
-      virtualization-type = "hvm"
+      "tag:Name" : var.vpc_name
     }
-    most_recent = true
-    owners      = ["099720109477"]
   }
-  ssh_username = "ubuntu"
+  subnet_filter {
+    filters = {
+      "tag:Name" : var.subnet_name
+    }
+  }
 }
 
 build {
-  name = "learn-packer"
+  name = "ebs-builder"
   sources = [
     "source.amazon-ebs.ubuntu"
   ]

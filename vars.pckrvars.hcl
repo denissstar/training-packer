@@ -1,1 +1,0 @@
-ami_prefix = "ami-name-from-vars"

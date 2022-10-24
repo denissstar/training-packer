@@ -1,0 +1,7 @@
+ami_prefix    = "new-ami-name"
+vpc_name      = "Talent-Academy-VPC"
+subnet_name   = "Public-A"
+aws_ami_name  = "ubuntu/images/*ubuntu-jammy-22.04-amd64-server-*"
+aws_owner_id  = "099720109477"
+instance_type = "t2.micro"
+region        = "eu-central-1"
